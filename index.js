@@ -5,12 +5,7 @@ const Manager = require("./lib/Manager");
 const Engineer = require("./lib/Engineer");
 const Intern = require("./lib/Intern");
 
-const createHTML = require("./src/html");
-const {
-  createManagerCards,
-  createEngineerCards,
-  createInternCards,
-} = require("./src/cards");
+const createHTML = require("./src/template");
 
 const index = "./dist/index.html";
 
@@ -82,7 +77,7 @@ const questions = [
 ];
 
 function init() {
-  inquirer.prompt(managerQuestions).then((answers) => {
+  inquirer.prompt(questions).then((answers) => {
     const manager = new Manager(
       answers.name,
       answers.id,
@@ -106,10 +101,12 @@ function init() {
       }
     }
 
-    const managerCard = createManagerCards(manager);
-    const engineerCards = createEngineerCards(engineerList);
-    const internCards = createInternCards(internList);
-    const html = createHTML(managerCard, engineerCards, internCards);
+    const html = createHTML(manager, engineerList, internList);
+
+    // const managerCard = createManagerCards(manager);
+    // const engineerCards = createEngineerCards(engineerList);
+    // const internCards = createInternCards(internList);
+    // const html = createHTML(managerCard, engineerCards, internCards);
 
     fs.writeFile(index, html, (err) =>
       err ? console.error(err) : console.log("HTML created!")
