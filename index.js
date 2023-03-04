@@ -1,70 +1,120 @@
-// should ask user which role they are and then ask questions to fill that role's properties
-
-// then when all roles have been asked (delete chosen role from list options each time)
-
-// Access lib and create a card for each file
-// use for of
 const inquirer = require("inquirer");
 const fs = require("fs");
 
-// Shit, questions change based on Employee type
-// Set of questions for each emptype
-const roles = {
-  type: "list",
-  name: "role",
-  message: "What is your role?",
-  options: ["Manager", "Engineer", "Intern"],
-};
+const Manager = require("./lib/Manager");
+const Engineer = require("./lib/Engineer");
+const Intern = require("./lib/Intern");
 
-// basic questions array. add on to them depending on the role?
-// a questions array for each role?
+const createHTML = require("./src/html");
+const {
+  createManagerCards,
+  createEngineerCards,
+  createInternCards,
+} = require("./src/cards");
+
+const index = "./dist/index.html";
+
 const questions = [
   {
     type: "input",
     name: "name",
-    message: "What is your name?",
+    message: "What is the manager's name?",
   },
   {
     type: "input",
     name: "id",
-    message: "What is your ID?",
+    message: "What is the manager's ID?",
   },
   {
     type: "input",
     name: "email",
-    message: "What is your email?",
+    message: "What is the manager's email?",
+  },
+  {
+    type: "input",
+    name: "officeNumber",
+    message: "What is the manager's office number?",
+  },
+  {
+    type: "loop",
+    name: "employees",
+    message: "Would you like to add another employee?",
+    questions: [
+      {
+        type: "list",
+        name: "role",
+        message: "What role would you like to add next?",
+        options: ["Engineer", "Intern"],
+      },
+      {
+        type: "input",
+        name: "name",
+        message: "Enter the employee's name:",
+      },
+      {
+        type: "input",
+        name: "id",
+        message: "Enter the employee's ID:",
+      },
+      {
+        type: "input",
+        name: "email",
+        message: "Enter the employee's email:",
+      },
+      {
+        type: "input",
+        name: "github",
+        message: "Enter the employee's github username:",
+        when(answers) {
+          return answers.role === "Engineer";
+        },
+      },
+      {
+        type: "input",
+        name: "school",
+        message: "Enter the employee's school:",
+        when(answers) {
+          return answers.role === "Intern";
+        },
+      },
+    ],
   },
 ];
 
-const managerQuestions = {
-  type: "input",
-  name: "officeNumber",
-  message: "What is your office number?",
-};
-
-const engineerQuestions = {
-  type: "input",
-  name: "github",
-  message: "What is your gitHub username?",
-};
-
-const internQuestions = {
-  type: "input",
-  name: "school",
-  message: "What school do you attend?",
-};
-
-// Function that creates a card based on the data
-function writeFile(fileName, data) {
-  // I guess we're writing a whole ass HTML file in here
-  // Call the card maker to create the cards in for of loop
-}
-
-function createCard(data) {}
-
 function init() {
-  inquirer.prompt(roles).then((answer) => {
-    // based on which role was chosen, call
-    switch(answer)
+  inquirer.prompt(managerQuestions).then((answers) => {
+    const manager = new Manager(
+      answers.name,
+      answers.id,
+      answers.email,
+      answers.officeNumber
+    );
+
+    const employees = answers.employees;
+    const engineerList = [];
+    const internList = [];
+
+    for (var e of employees) {
+      if (e.role === "Engineer") {
+        // create an Engineer for them and render their card
+        let engineer = new Engineer(e.name, e.id, e.email, e.github);
+        engineerList.push(engineer);
+      } else if (e.role === "Intern") {
+        // create an Intern for them and render the card
+        let intern = new Intern(e.name, e.id, e.email, e.school);
+        internList.push(intern);
+      }
+    }
+
+    const managerCard = createManagerCards(manager);
+    const engineerCards = createEngineerCards(engineerList);
+    const internCards = createInternCards(internList);
+    const html = createHTML(managerCard, engineerCards, internCards);
+
+    fs.writeFile(index, html, (err) =>
+      err ? console.error(err) : console.log("HTML created!")
+    );
   });
 }
+
+init();
