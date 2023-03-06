@@ -13,43 +13,45 @@ function createManagerCard(manager) {
 }
 
 function createEngineerCards(engineers) {
-  const engCards = ``;
+  var cards = ``;
+
   for (var e of engineers) {
-    engCards += `
-<div class="card">
-    <h5 class="card-title bg-primary">${e.name}</h5>
-    <h6 class="card-subtitle">${e.role}</h6>
-    <ul class="list-group list-group-flush">
-      <li class="list-group-item">ID: ${e.id}</li>
-      <li class="list-group-item">Email: <a href="mailto:${e.email}">${e.email}</a></li>
-      <li class="list-group-item">Github: <a href="https://github.com/${e.github}">${e.github}</a></li>
-    </ul>
-</div>`;
+    cards += `
+    <div class="card">
+        <h5 class="card-title bg-primary">${e.name}</h5>
+        <h6 class="card-subtitle">${e.role}</h6>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">ID: ${e.id}</li>
+          <li class="list-group-item">Email: <a href="mailto:${e.email}">${e.email}</a></li>
+          <li class="list-group-item">Github: <a href="https://github.com/${e.github}">${e.github}</a></li>
+        </ul>
+    </div>`;
   }
-  return engCards;
+
+  return cards;
 }
 
 function createInternCards(interns) {
-  const internCards = ``;
+  var cards = ``;
+  // have to check that interns has a length before attempting to iterate
+
   for (var i of interns) {
-    internCards += `
-<div class="card">
-    <h5 class="card-title bg-primary">${i.name}</h5>
-    <h6 class="card-subtitle">${i.role}</h6>
-    <ul class="list-group list-group-flush">
-      <li class="list-group-item">ID: ${i.id}</li>
-      <li class="list-group-item">Email: <a href="mailto:${i.email}">${i.email}</a></li>
-      <li class="list-group-item">School: ${i.school}</li>
-    </ul>
-</div>`;
+    cards += `
+    <div class="card">
+        <h5 class="card-title bg-primary">${i.name}</h5>
+        <h6 class="card-subtitle">${i.role}</h6>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">ID: ${i.id}</li>
+          <li class="list-group-item">Email: <a href="mailto:${i.email}">${i.email}</a></li>
+          <li class="list-group-item">School: ${i.school}</li>
+        </ul>
+    </div>`;
   }
-  return internCards;
+  return cards;
 }
 
-// try it like this for now
-// figure out formatting later
 function createHTML(manager, engineers, interns) {
-  const managerCard = createManagerCards(manager);
+  const managerCard = createManagerCard(manager);
   const engineerCards = createEngineerCards(engineers);
   const internCards = createInternCards(interns);
 

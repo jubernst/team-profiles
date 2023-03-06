@@ -1,5 +1,6 @@
-const inquirer = require("inquirer");
 const fs = require("fs");
+const inquirer = require("inquirer");
+inquirer.registerPrompt("loop", require("inquirer-loop")(inquirer));
 
 const Manager = require("./lib/Manager");
 const Engineer = require("./lib/Engineer");
@@ -33,13 +34,13 @@ const questions = [
   {
     type: "loop",
     name: "employees",
-    message: "Would you like to add another employee?",
+    message: "Add another employee?",
     questions: [
       {
         type: "list",
         name: "role",
-        message: "What role would you like to add next?",
-        options: ["Engineer", "Intern"],
+        message: "What type of employee would you like to add?",
+        choices: ["Engineer", "Intern"],
       },
       {
         type: "input",
@@ -77,41 +78,40 @@ const questions = [
 ];
 
 function init() {
-  inquirer.prompt(questions).then((answers) => {
-    const manager = new Manager(
-      answers.name,
-      answers.id,
-      answers.email,
-      answers.officeNumber
-    );
+  // need to catch errors so i see where they're being thrown
+  inquirer
+    .prompt(questions)
+    .then((answers) => {
+      const manager = new Manager(
+        answers.name,
+        answers.id,
+        answers.email,
+        answers.officeNumber
+      );
+      const employees = answers.employees;
+      const engineers = [];
+      const interns = [];
 
-    const employees = answers.employees;
-    const engineerList = [];
-    const internList = [];
-
-    for (var e of employees) {
-      if (e.role === "Engineer") {
-        // create an Engineer for them and render their card
-        let engineer = new Engineer(e.name, e.id, e.email, e.github);
-        engineerList.push(engineer);
-      } else if (e.role === "Intern") {
-        // create an Intern for them and render the card
-        let intern = new Intern(e.name, e.id, e.email, e.school);
-        internList.push(intern);
+      // again, check that employees it iterable before looping
+      for (const e in employees) {
+        if (e.role === "Engineer") {
+          let engineer = new Engineer(e.name, e.id, e.email, e.github);
+          engineers.push(engineer);
+        } else if (e.role === "Intern") {
+          let intern = new Intern(e.name, e.id, e.email, e.school);
+          interns.push(intern);
+        }
       }
-    }
 
-    const html = createHTML(manager, engineerList, internList);
+      const html = createHTML(manager, engineers, interns);
 
-    // const managerCard = createManagerCards(manager);
-    // const engineerCards = createEngineerCards(engineerList);
-    // const internCards = createInternCards(internList);
-    // const html = createHTML(managerCard, engineerCards, internCards);
-
-    fs.writeFile(index, html, (err) =>
-      err ? console.error(err) : console.log("HTML created!")
-    );
-  });
+      fs.writeFile(index, html, (err) =>
+        err ? console.error(err) : console.log("HTML created!")
+      );
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 }
 
 init();
