@@ -92,8 +92,8 @@ function init() {
       const engineers = [];
       const interns = [];
 
-      // again, check that employees it iterable before looping
-      for (const e in employees) {
+      for (var i = 0; i < employees.length; i++) {
+        var e = employees[i];
         if (e.role === "Engineer") {
           let engineer = new Engineer(e.name, e.id, e.email, e.github);
           engineers.push(engineer);
