@@ -1,14 +1,15 @@
 function createManagerCard(manager) {
   return `
   <div class="card h-100">
-      <h5 class="card-title bg-primary">${manager.name}\n${manager.role}</h5>
+      <h5 class="card-title bg-info">${manager.name}</h5>
+      <h6 class="card-subtitle bg-info">${manager.role}</h6>
       <div>
         <ul class="list-group list-group-flush">
           <li class="list-group-item">ID: ${manager.id}</li>
           <li class="list-group-item">Email: <a href="mailto:${manager.email}">${manager.email}</a></li>
           <li class="list-group-item">Office number: ${manager.officeNumber}</li>
         </ul>
-      <div>
+      </div>
   </div>
   `;
 }
@@ -19,14 +20,15 @@ function createEngineerCards(engineers) {
   for (var e of engineers) {
     cards += `
     <div class="card h-100">
-        <h5 class="card-title bg-primary">${e.name}\n${e.role}</h5>
+        <h5 class="card-title bg-info">${e.name}</h5>
+        <h6 class="card-subtitle bg-info">${e.role}</h6>
         <div>
           <ul class="list-group list-group-flush">
             <li class="list-group-item">ID: ${e.id}</li>
             <li class="list-group-item">Email: <a href="mailto:${e.email}">${e.email}</a></li>
             <li class="list-group-item">Github: <a href="https://github.com/${e.github}">${e.github}</a></li>
           </ul>
-        <div>
+        </div>
     </div>
     `;
   }
@@ -39,15 +41,16 @@ function createInternCards(interns) {
 
   for (var i of interns) {
     cards += `
-    <div class="card h-100 ">
-        <h5 class="card-title bg-primary ">${i.name}\n${i.role}</h5>
+    <div class="card h-100">
+        <h5 class="card-title bg-info">${i.name}</h5>
+        <h6 class="card-subtitle bg-info">${i.role}</h6>
         <div>
           <ul class="list-group list-group-flush">
             <li class="list-group-item">ID: ${i.id}</li>
             <li class="list-group-item">Email: <a href="mailto:${i.email}">${i.email}</a></li>
             <li class="list-group-item">School: ${i.school}</li>
           </ul>
-        <div>
+        </div>
     </div>
     `;
   }
@@ -81,7 +84,7 @@ function createHTML(manager, engineers, interns) {
       <h1 class="display-1 pt-md">My Team</h1>
     </header>
  
-    <div class="card-group">
+    <div class="card-group container">
       ${managerCard}
       ${engineerCards}
       ${internCards}

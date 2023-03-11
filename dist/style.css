@@ -1,3 +1,22 @@
-/* $card-height: 100%; 
- give hero vertical margins
- flexbox*/
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.header {
+  margin: 10%;
+}
+
+.card {
+  width: 20rem;
+  padding: 10px;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  flex-basis: auto;
+  justify-content: space-between;
+  margin: 50px 20px;
+}
